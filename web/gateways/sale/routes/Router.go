@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"bxd-middleware-service/gateways/sale/http/controller"
+	"blog-bxd-service/gateways/sale/http/controller"
 	"github.com/gin-gonic/gin"
 )
 

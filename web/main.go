@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bxd-middleware-service/config"
-	"bxd-middleware-service/server"
-	"bxd-middleware-service/utils/log"
+	"blog-bxd-service/config"
+	"blog-bxd-service/server"
+	"blog-bxd-service/utils/log"
 	"flag"
 )
 
@@ -28,7 +28,7 @@ func main() {
 	config.SetupConfig(env)
 
 	// 设置日志
-	log.SetupLogging(env)
+	log.SetupLogger(env)
 
 	// 设置服务
 	server.SetServer(env)

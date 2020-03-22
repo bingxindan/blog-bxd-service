@@ -2,10 +2,11 @@ package server
 
 import (
 	"context"
-	"bxd-middleware-service/config"
-	bootstrapOrder "bxd-middleware-service/gateways/order/bootstrap"
-	bootstrapSale "bxd-middleware-service/gateways/sale/bootstrap"
-	"bxd-middleware-service/utils/log"
+	"blog-bxd-service/config"
+	bootstrapOrder "blog-bxd-service/gateways/order/bootstrap"
+	bootstrapSale "blog-bxd-service/gateways/sale/bootstrap"
+	"log"
+	log2 "blog-bxd-service/utils/log"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -63,7 +64,7 @@ func SetRouter(env string) http.Handler {
 
 	app := gin.New()
 
-	app.Use(log.LogerMiddleware(env), gin.Recovery())
+	app.Use(log2.LogerMiddleware(env), gin.Recovery())
 
 	// 接入所有项目初始化文件
 	bootstrapSale.StartSaleServer(app)

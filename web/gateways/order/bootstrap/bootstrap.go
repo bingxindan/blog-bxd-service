@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"bxd-middleware-service/gateways/order/routes"
+	"blog-bxd-service/gateways/order/routes"
 	"github.com/gin-gonic/gin"
 )
 

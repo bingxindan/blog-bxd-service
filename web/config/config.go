@@ -31,7 +31,7 @@ func SetupConfig(env string) {
 	var err error
 
 	Config, err = ini.Load(
-		"/Users/lauren/work/goweb/bxd-middleware-service/server.ini",
+		"/Users/lauren/work/goweb/blog-bxd-service/server.ini",
 		"conf/"+env+".ini")
 	if err != nil {
 		log.Panic(err)

@@ -1,8 +1,8 @@
 package database
 
 import (
-	"bxd-middleware-service/config"
-	"bxd-middleware-service/utils/log"
+	"blog-bxd-service/config"
+	"blog-bxd-service/utils/log"
 	"github.com/go-xorm/xorm"
 	"math/rand"
 	"os"
