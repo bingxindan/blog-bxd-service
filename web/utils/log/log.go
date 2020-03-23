@@ -60,7 +60,7 @@ func LogerMiddleware(env string) gin.HandlerFunc {
 		// 日志格式
 		fmt.Fprintf(
 			logWriter,
-			"[status_code:%s][latency_time:%s][client_ip:%s][req_method:%s][req_uri:%s]\n",
+			"[status_code:%d][latency_time:%s][client_ip:%s][req_method:%s][req_uri:%s]\n",
 			statusCode,
 			latencyTime,
 			clientIp,
