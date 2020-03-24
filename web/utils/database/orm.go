@@ -2,69 +2,42 @@ package database
 
 import (
 	"blog-bxd-service/config"
-	"blog-bxd-service/utils/log"
-	"github.com/go-xorm/xorm"
-	"math/rand"
+	"blog-bxd-service/utils"
+	"fmt"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mssql"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"log"
 	"os"
-	"time"
 )
 
 var (
-	dbm        *xorm.Engine
-	dbs        []*xorm.Engine
-	checkCount int
+	GormDB *gorm.DB
 )
 
-func Instance(isMaster, isSlave bool, mConn, sConn string) {
+func Instance(connKey string) {
 	var err error
 
-	// 主库添加
-	if isMaster {
-		if mConn == "" || len(mConn) == 0 {
-			return
-		}
-		mDsn := config.Get(mConn)
-		dbm, err = xorm.NewEngine("mysql", mDsn)
-		dbm.SetMaxIdleConns(10)
-		dbm.SetMaxOpenConns(200)
-		dbm.ShowSQL(true)
-		dbm.ShowExecTime(true)
-
-		if err != nil {
-			log.Errorf("Instance master err [%s]", err)
-			os.Exit(1)
-		}
-	}
-
 	// 从库添加
-	if isSlave {
-		if sConn == "" || len(sConn) == 0 {
-			return
-		}
-		slaves := config.Get(sConn)
-
-		for _, sDsn := range slaves {
-			_dbs, err := xorm.NewEngine("mysql", sDsn)
-			_dbs.SetMaxIdleConns(10)
-			_dbs.SetMaxOpenConns(200)
-			_dbs.ShowSQL(true)
-			_dbs.ShowExecTime(true)
-
-			if err != nil {
-				log.Errorf("Instance slave err [%s]", err)
-			} else {
-				dbs = append(dbs, _dbs)
-			}
-		}
+	if connKey == "" || len(connKey) == 0 {
+		log.Fatal("[mysql:conn:fail]")
+		os.Exit(1)
 	}
-}
 
-func Master() *xorm.Engine {
-	return dbm
-}
+	conns := config.Get(connKey+".connect")
+	c := utils.JsonToMap(conns)
 
-func Slave() *xorm.Engine {
-	rand.Seed(time.Now().Unix())
-	rn := rand.Intn(len(dbs) - 1)
-	return dbs[rn]
+	s := fmt.Sprintf(
+		"%s:%s@(%s)/%s?charset=%s&parseTime=True&loc=Local",
+		c["username"], c["password"],
+		c["hostname"], c["database"],
+		c["charset"],
+	)
+	GormDB, err = gorm.Open("mysql", s)
+
+	if err != nil {
+		log.Fatalf("Instance GormDB err [%s]", err)
+		os.Exit(2)
+	}
 }
